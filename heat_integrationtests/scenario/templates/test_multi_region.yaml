@@ -1,0 +1,32 @@
+heat_template_version: 2015-04-30
+
+description: Multi-Region Test
+
+resources:
+  stack_one:
+    type: OS::Heat::Stack
+    properties:
+      context:
+        region_name: RegionOne
+      template: { get_file: "test_remote_region_1.yaml" }
+      timeout: 60
+      parameters:
+        value: "test1"
+
+  stack_two:
+    type: OS::Heat::Stack
+    properties:
+      context:
+        region_name: RegionTwo
+      template: { get_file: "test_remote_region_2.yaml" }
+      timeout: 60
+      parameters:
+        value: "test2"
+
+outputs:
+  stack_one_outputs:
+    description: Output of stack_one.
+    value: { get_attr: [stack_one, outputs] }
+  stack_two_outputs:
+    description: Output of stack_two.
+    value: { get_attr: [stack_two, outputs] }
